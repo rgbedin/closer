@@ -1,0 +1,238 @@
+// Default empty project template
+import bb.cascades 1.0
+import bb.cascades.pickers 1.0
+
+// creates one page with a label
+Page {
+    Container {
+        objectName: "rootContainer"
+        layout: AbsoluteLayout {}
+        
+        // background image
+        ImageView {
+            id: backgroundImage
+            objectName: "backgroundImage"
+            imageSource: "asset:///images/background.png"
+            preferredWidth: 768
+            preferredHeight: 1280
+            scalingMethod: ScalingMethod.AspectFill
+        }
+        
+        // draggable text icon
+        ImageView {
+            id: textIcon
+        
+            // dragging properties of the text icon
+            property real dy: 0
+            property real dx: 0
+            property real currentY: 0
+            property real currentX: 0
+            property real lastX: 0
+            property real lastY: 0
+            
+            // source of the text icon
+            imageSource: "asset:///images/text_icon.png"
+            
+            // layout properties of the text icon
+            layoutProperties: AbsoluteLayoutProperties {
+                positionX: 50
+                positionY: 1100
+             }
+             
+             // animation that will be played when the icon is released
+             animations: [
+                 TranslateTransition {
+                     id: resetTextIcon
+                     toY: 0
+                     toX: 0
+                     duration: 400
+                 }
+             ]          
+             
+             onTouchExit: {
+                  // call to add text
+                  _closer.addText(lastX, lastY);
+                 // release the text icon when stopping touch
+                 releaseTextIcon();
+             }
+             
+             // touch even of the text icon
+             onTouch: {
+                 // disable implicit animations (?)
+                 translationControllerY.enabled = false;
+                 translationControllerX.enabled = false;
+                 
+                 if (event.isDown()) {
+                     // stop the reset animation
+                     resetTextIcon.stop();
+                     
+                     // user initiates the touch event
+                     // saves the current coordinate
+                     dx = event.windowX;
+                     dy = event.windowY;
+                 }
+                 else if (event.isMove()) {
+                     // user is moving the object
+                     // sets the new position of the object
+                     currentY = event.windowY - dy;
+                     currentX = event.windowX - dx;
+                     translationY = currentY;
+                     translationX = currentX;
+                     // saves the location of the last touch
+                     lastX = event.windowX;
+                     lastY = event.windowY;
+                 }
+                 else if (event.isUp()) {
+                     // call to add text
+                     _closer.addText(lastX, lastY);
+                     // user released the object
+                     releaseTextIcon();
+                 }
+                 
+                 // re-enabling the implicit animations (?)
+                 translationControllerY.enabled = true;
+                 translationControllerX.enabled = true;
+             }
+             
+             attachedObjects: [
+                 ImplicitAnimationController {
+                     id: translationControllerY
+                     propertyName: "translationY"
+                 },
+                 ImplicitAnimationController {
+                     id: translationControllerX
+                     propertyName: "translationX"
+                 }
+             ]
+         }
+         
+        // draggable picture icon
+        ImageView {
+            id: pictureIcon
+        
+            // dragging properties of the icon
+            property real dy: 0
+            property real dx: 0
+            property real currentY: 0
+            property real currentX: 0
+            property real lastX: 0
+            property real lastY: 0
+            
+            // source of the icon
+            imageSource: "asset:///images/picture_icon.png"
+            
+            // layout properties of the icon
+            layoutProperties: AbsoluteLayoutProperties {
+                positionX: 200
+                positionY: 1100
+             }
+             
+             // animation that will be played when the icon is released
+             animations: [
+                 TranslateTransition {
+                     id: resetPictureIcon
+                     toY: 0
+                     toX: 0
+                     duration: 400
+                 }
+             ]          
+             
+             onTouchExit: {
+                  // call to picker
+                  picker.open();
+                 // release the text icon when stopping touch
+                 releasePictureIcon();
+             }
+             
+             // touch even of the icon
+             onTouch: {
+                 // disable implicit animations (?)
+                 translationControllerPictureY.enabled = false;
+                 translationControllerPictureX.enabled = false;
+                 
+                 if (event.isDown()) {
+                     // stop the reset animation
+                     resetPictureIcon.stop();
+                     
+                     // user initiates the touch event
+                     // saves the current coordinate
+                     dx = event.windowX;
+                     dy = event.windowY;
+                 }
+                 else if (event.isMove()) {
+                     // user is moving the object
+                     // sets the new position of the object
+                     currentY = event.windowY - dy;
+                     currentX = event.windowX - dx;
+                     translationY = currentY;
+                     translationX = currentX;
+                     // saves the location of the last touch
+                     lastX = event.windowX;
+                     lastY = event.windowY;
+                 }
+                 else if (event.isUp()) {
+                     // call to picker
+                     picker.open();
+                     // user released the object
+                     releasePictureIcon();
+                 }
+                 
+                 // re-enabling the implicit animations (?)
+                 translationControllerPictureY.enabled = true;
+                 translationControllerPictureX.enabled = true;
+             }
+             
+             attachedObjects: [
+                 ImplicitAnimationController {
+                     id: translationControllerPictureY
+                     propertyName: "translationY"
+                 },
+                 ImplicitAnimationController {
+                     id: translationControllerPictureX
+                     propertyName: "translationX"
+                 }
+             ]
+         }
+    }
+    
+    function releaseTextIcon() {
+         // check if the text icon is not at its original position
+         if (textIcon.translationY != 0 || textIcon.translationX != 0) {
+             // if it is not, play the reset animation
+             resetTextIcon.play();
+         }
+     }
+     
+     function releasePictureIcon() {
+         // check if the picture icon is not at its original position
+         if (pictureIcon.translationY != 0 || pictureIcon.translationX != 0) {
+             // if it is not, play the reset animation
+             resetPictureIcon.play();
+         }
+     }
+     
+     attachedObjects: [
+         // file picker object to choose the background picture
+         FilePicker {
+             id: picker
+ 
+             property string selectedFile
+ 
+             title: qsTr ("Image Picker")
+             mode: FilePickerMode.Picker
+             type: FileType.Picture
+             viewMode: FilePickerViewMode.Default
+             sortBy: FilePickerSortFlag.Default
+             sortOrder: FilePickerSortOrder.Default
+ 
+             onFileSelected: {
+                 // grab the file selected
+                 selectedFile = selectedFiles[0];
+                 console.log("File Selected: " + selectedFile);
+                 // set as background image
+                 backgroundImage.imageSource = selectedFile;
+             }
+         }
+     ]
+}
+
