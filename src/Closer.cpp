@@ -15,6 +15,8 @@
 #include <bb/cascades/TextStyle>
 #include <bb/cascades/ColorPaint>
 
+#include <SocialNetworkModel.h>
+
 using namespace bb::cascades;
 using namespace std;
 
@@ -30,6 +32,7 @@ Closer::Closer(bb::cascades::Application *app)
 
     // creates a link with the QML file
     qml->setContextProperty("_closer", this);
+    qml->setContextProperty("_socialNetworkModel", new SocialNetworkModel(app));
 
     // create root object for the UI
     root = qml->createRootObject<AbstractPane>();
@@ -64,7 +67,7 @@ void Closer::addText(float posX, float posY)
 	rootContainer->add(textArea);
 }
 
-void Closer::setBackgroundImage()
+void Closer::showSocialNetworkPicker()
 {
-
+	// TODO
 }

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Closer.hpp'
 **
-** Created: Tue Feb 12 23:45:13 2013
+** Created: Thu Feb 14 22:11:29 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -41,7 +41,7 @@ static const uint qt_meta_data_Closer[] = {
 static const char qt_meta_stringdata_Closer[] = {
     "Closer\0\0qmlString\0test(QString)\0"
     "posX,posY\0addText(float,float)\0"
-    "setBackgroundImage()\0"
+    "showSocialNetworkPicker()\0"
 };
 
 void Closer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -52,7 +52,7 @@ void Closer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         switch (_id) {
         case 0: _t->test((*reinterpret_cast< const QString(*)>(_a[1]))); break;
         case 1: _t->addText((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 2: _t->setBackgroundImage(); break;
+        case 2: _t->showSocialNetworkPicker(); break;
         default: ;
         }
     }

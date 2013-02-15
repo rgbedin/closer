@@ -21,7 +21,7 @@ public:
 public Q_SLOTS:
     void test(const QString &qmlString);
     void addText(float posX, float posY);
-    void setBackgroundImage();
+    void showSocialNetworkPicker();
 };
 
 
