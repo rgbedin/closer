@@ -1,0 +1,5 @@
+<cards>
+    <card name="Alex" email="alex@closer.ca" title="CFO" backGroundImageAddress="images/alex.png"/>
+    <card name="Zooey" email="zooey@closer.ca" title="Software Engineering" backGroundImageAddress="images/zooey.png"/>
+    <card name="Henna" email="henna@closer.ca" title="Designer" backGroundImageAddress="images/henna.png"/>
+</cards>

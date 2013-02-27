@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Prototype.hpp'
 **
-** Created: Sun Feb 24 20:15:59 2013
+** Created: Tue Feb 26 23:51:22 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_Prototype[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,14 +31,17 @@ static const uint qt_meta_data_Prototype[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-      21,   11,   10,   10, 0x0a,
-      42,   10,   10,   10, 0x0a,
+      36,   11,   10,   10, 0x0a,
+      78,   11,   10,   10, 0x0a,
+     121,   10,   10,   10, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Prototype[] = {
-    "Prototype\0\0posX,posY\0addText(float,float)\0"
+    "Prototype\0\0name,email,title,picture\0"
+    "writeXML(QString,QString,QString,QString)\0"
+    "writeJSON(QString,QString,QString,QString)\0"
     "showSocialNetworkPicker()\0"
 };
 
@@ -48,8 +51,9 @@ void Prototype::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         Q_ASSERT(staticMetaObject.cast(_o));
         Prototype *_t = static_cast<Prototype *>(_o);
         switch (_id) {
-        case 0: _t->addText((*reinterpret_cast< float(*)>(_a[1])),(*reinterpret_cast< float(*)>(_a[2]))); break;
-        case 1: _t->showSocialNetworkPicker(); break;
+        case 0: _t->writeXML((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4]))); break;
+        case 1: _t->writeJSON((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4]))); break;
+        case 2: _t->showSocialNetworkPicker(); break;
         default: ;
         }
     }
@@ -87,9 +91,9 @@ int Prototype::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }

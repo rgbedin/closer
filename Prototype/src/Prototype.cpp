@@ -14,10 +14,15 @@
 #include <bb/cascades/AbsoluteLayoutProperties>
 #include <bb/cascades/TextStyle>
 #include <bb/cascades/ColorPaint>
+#include <bb/data/XmlDataAccess>
+
+#include <QVariant>
+
 
 #include <SocialNetworkModel.h>
 
 using namespace bb::cascades;
+using namespace bb::data;
 using namespace std;
 
 AbstractPane *root;
@@ -44,27 +49,66 @@ Prototype::Prototype(bb::cascades::Application *app)
     appObj = app;
 }
 
-void Prototype::addText(float posX, float posY)
+void Prototype::writeXML(const QString &name, const QString &email, const QString &title, const QString &picture)
 {
-	// create the text style
-	TextStyle* textStyle = new TextStyle;
-	textStyle->setFontSizeValue(15);
-	textStyle->setColor(QVariant(Qt::white));
-	// TODO: set the style to the text area
-	// creates a text area object with background invisible
-	TextArea* textArea = TextArea::create().backgroundVisible(false);
-	// TODO: externalize this string
-	textArea->setText("Tap to input text...");
-	// sets the layout of the text (position)
-	AbsoluteLayoutProperties* layout = AbsoluteLayoutProperties::create().position(posX, posY);
-	textArea->setLayoutProperties(layout);
-	// adds the text area to the scene
-	Container* rootContainer = root->findChild<Container*>("rootContainer");
-	rootContainer->add(textArea);
+	//QObject *newButton = root->findChild<QObject*>("doneButton");
+	//newButton->setProperty("text", name);
+
+	QVariantMap card;
+	card["name"] = QVariant(name);
+	card["email"] = QVariant(email);
+	card["title"] = QVariant(title);
+	card["backGroundImageAddress"] = QVariant("address");
+
+	QVariantList myCardList = QVariantList() << QVariant(card);
+
+	QVariantMap topLevelCardMap;
+	topLevelCardMap[".root"] = QVariant("cards");
+	topLevelCardMap["card"] = QVariant(myCardList);
+	QVariant myData = QVariant(topLevelCardMap);
+
+	QDir home = QDir::home();
+	QTemporaryFile file(home.absoluteFilePath("models/mycards.xml"));
+
+	if (file.open()) {
+	    // Create an XmlDataAccess object and save the data to the file
+	    XmlDataAccess xda;
+	    xda.save(myData, &file);
+	} else {
+
+		QObject *newButton = root->findChild<QObject*>("doneButton");
+			newButton->setProperty("text", name);
+	}
+
 }
 
+void Prototype::writeJSON(const QString &name, const QString &email, const QString &title, const QString &picture)
+{
+	QObject *newButton = root->findChild<QObject*>("doneButton");
+	newButton->setProperty("text", name);
+
+	// Create QVariantMap objects to contain the data for each employee
+	QVariantMap card;
+	card["name"] = QVariant(name);
+	card["email"] = QVariant(email);
+	card["title"] = QVariant(title);
+	card["backGroundImageAddress"] = QVariant("address");
+
+		QVariantList myCardList = QVariantList() << QVariant(card);
+
+	// Retrieve the working directory, and create a temporary .json file in that
+	// location
+	QDir home = QDir::home();
+	QTemporaryFile file(home.absoluteFilePath("myJSONFile.json"));
+
+	// Open the file that was created
+	if (file.open()) {
+	    // Create a JsonDataAccess object and save the data to the file
+	    JsonDataAccess jda;
+	    jda.save(myCardList, &file);
+	}
+}
 void Prototype::showSocialNetworkPicker()
 {
 	// TODO
 }
-

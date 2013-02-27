@@ -9,6 +9,8 @@ TabbedPane {
         Page {
             id: tab1
             Container {
+                layout: DockLayout {
+                }
                 ImageView {
                     id: backgroundImage0
                     objectName: "backgroundImage"
@@ -17,6 +19,7 @@ TabbedPane {
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
                 }
+                //CONTENT
             }
         }
     }
@@ -25,6 +28,8 @@ TabbedPane {
         Page {
             id: tab2
             Container {
+                layout: DockLayout {
+                }
                 ImageView {
                     id: backgroundImage1
                     objectName: "backgroundImage"
@@ -33,72 +38,7 @@ TabbedPane {
                     horizontalAlignment: HorizontalAlignment.Center
                     verticalAlignment: VerticalAlignment.Center
                 }
-                layout: DockLayout {
-                }
-
-                // Main List
-                ListView {
-                    id: personalCardList
-                    layout: GridListLayout {
-                        columnCount: 2
-                        headerMode: ListHeaderMode.Standard
-                        cellAspectRatio: 1.4
-                        spacingAfterHeader: 20
-                        verticalCellSpacing: 0
-                    }
-
-                    // This data model will be replaced by a JSON model when the application starts,
-                    // an XML model can be used to prototype the UI and for smaller static lists.
-                    dataModel: XmlDataModel {
-                        source: "models/mycards.xml"
-                    }
-                    listItemComponents: [
-                        ListItemComponent {
-                            type: "header"
-                            Header {
-                                title: Title //{
-                                //                                    // if (ListItemData.title) {
-                                //                                    // If the data is loaded from XML, a title property is used for the title.
-                                //                                    ListItemData.title
-                                //                                    // } else {
-                                //                                    // // If it is loaded from JSON and set in a GroupDataModel, the header info is set in ListItemData.
-                                //                                    // ListItemData
-                                //                                    // }
-                                //                                }
-                            }
-                        },
-                        ListItemComponent {
-                            type: "card"
-                            CardItem {
-                                verticalAlignment: VerticalAlignment.Center
-                                horizontalAlignment: HorizontalAlignment.Center
-                            }
-                        }
-                    ]
-                    leftPadding: 80.0
-                    topPadding: 150.0
-
-                    // listItemComponents
-                    //                    onTriggered: {
-                    //
-                    //                        // To avoid triggering navigation when pressing the header items, we check so that the
-                    //                        // index path length is larger then one (one entry would be a group under a header item).
-                    //                        if (indexPath.length > 1) {
-                    //                            // When an item is selected we push the recipe Page in the chosenItem file attribute.
-                    //                            var chosenItem = dataModel.data(indexPath);
-                    //
-                    //                            // Create the content page and push it on top to drill down to it.
-                    //                            var contentpage = contentPageDefinition.createObject();
-                    //
-                    //                            // Set the content properties to reflect the selected image.
-                    //                            contentpage.contentImageURL = chosenItem.URL
-                    //                            contentpage.contentDescription = chosenItem.infoText
-                    //
-                    //                            // Push the content page to the navigation stack
-                    //                            nav.push(contentpage);
-                    //                        }
-                    //                    }
-                }
+                //CONTENT
             }
         }
     }
@@ -130,22 +70,12 @@ TabbedPane {
                         defaultImageSource: "asset:///images/text_icon.png"
                         //pressedImageSource: "asset:///myPressedImage.png"
                         //disabledImageSource: "asset:///myDisabledImage.png"
-                        property int num: 1
                         onClicked: {
-                            if (num == 1) {
-                                textContainer.setVisible(true);
-                                num = 0;
-                            } else {
-                                textContainer.setVisible(false);
-                                num = 1;
-                            }
+                            //                            if (textContainer.isVisible())
+                            //                            textContainer.setVisible(false);
+                            //                            else
+                            textContainer.setVisible(true);
                         }
-                    }
-                    Button {
-                        text: "TCOLOR"
-                        onClicked: {
-                        }
-                        preferredWidth: 25.0
                     }
                     ImageButton {
                         defaultImageSource: "asset:///images/picture_icon.png"
@@ -154,16 +84,14 @@ TabbedPane {
                         }
                     }
                     Button {
-                        text: "SOCIAL"
+                        text: "TEXT COLOR"
                         onClicked: {
                         }
                         preferredWidth: 25.0
                     }
                     Button {
-                        objectName: "doneButton"
                         text: "DONE"
                         onClicked: {
-                            _closer.writeXML(name.text, email.text, title.text, "test");
                         }
                         preferredWidth: 25.0
                     }
@@ -280,7 +208,7 @@ TabbedPane {
                         selectedFile = selectedFiles[0];
                         console.log("File Selected: " + selectedFile);
                         // set as background image
-                        backgroundImage2.imageSource = selectedFile;
+                        backgroundImage.imageSource = selectedFile;
                     }
                 }
             ]

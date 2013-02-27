@@ -3,6 +3,8 @@
 #define Prototype_HPP_
 
 #include <QObject>
+#include <QString>
+#include <bb/data/JsonDataAccess>
 
 namespace bb { namespace cascades { class Application; }}
 
@@ -19,7 +21,8 @@ public:
     virtual ~Prototype() {}
 
 public Q_SLOTS:
-    void addText(float posX, float posY);
+	void writeXML(const QString &name, const QString &email, const QString &title, const QString &picture);
+	void writeJSON(const QString &name, const QString &email, const QString &title, const QString &picture);
     void showSocialNetworkPicker();
 };
 
