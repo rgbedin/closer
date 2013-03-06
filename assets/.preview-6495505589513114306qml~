@@ -35,31 +35,16 @@ NavigationPane {
                 onTriggered: {
                     select(indexPath);
                     var chosenItem = dataModel.data(indexPath);
-                    
-                    if (chosenItem.myCard == "1") {
-                        
-                        var page = cardPageEdit.createObject();
-                        page.company = chosenItem.company;
-                        page.name = chosenItem.name;
-                        page.corporateTitle = chosenItem.corporateTitle;
-                        page.email = chosenItem.email;
-                        page.phone = chosenItem.phone;
-                        page.address = chosenItem.address;
-                        page.aboutMe = chosenItem.aboutMe;
-                        //                    page.linkedinProfiles = chosenItem.linkedinProfiles;
-                        nav.push(page); //nav.push(page);
-                    } else {
-                        var page = cardPageDefinition.createObject();
-                        page.company = chosenItem.company;
-                        page.name = chosenItem.name;
-                        page.corporateTitle = chosenItem.corporateTitle;
-                        page.email = chosenItem.email;
-                        page.phone = chosenItem.phone;
-                        page.address = chosenItem.address;
-                        page.aboutMe = chosenItem.aboutMe;
-                        //                    page.linkedinProfiles = chosenItem.linkedinProfiles;
-                        nav.push(page); //nav.push(page);
-                    }
+                    var page = cardPageDefinition.createObject();
+                    page.company = chosenItem.company;
+                    page.name = chosenItem.name;
+                    page.corporateTitle = chosenItem.corporateTitle;
+                    page.email = chosenItem.email;
+                    page.phone = chosenItem.phone;
+                    page.address = chosenItem.address;
+                    page.aboutMe = chosenItem.aboutMe;
+                    //                    page.linkedinProfiles = chosenItem.linkedinProfiles;
+                    nav.push(page); //nav.push(page);
                 }
                 onSelectionChanged: {
                     nav.popAndDelete();
@@ -75,15 +60,15 @@ NavigationPane {
                         ]
                         //                        //TODO Add here using NFC.
                         onItemAdded: {
-                            if (addShown) {
-                                if (nav.top == cardsReceivedListPage) {
-                                    cardsReceivedList.clearSelection();
-                                    cardsReceivedList.select(indexPath);
-                                    cardsReceivedList.scrollToItem(indexPath, ScrollAnimation.Default);
-                                    var page = quotePageDefinition.createObject();
-                                    nav.push(page);
-                                }
-                            }
+                            //                            if (addShown) {
+                            //                                if (nav.top == cardsReceivedListPage) {
+                            //                                    cardsReceivedList.clearSelection();
+                            //                                    cardsReceivedList.select(indexPath);
+                            //                                    cardsReceivedList.scrollToItem(indexPath, ScrollAnimation.Default);
+                            //                                    var page = quotePageDefinition.createObject();
+                            //                                    nav.push(page);
+                            //                                }
+                            //                            }
                         }
 
                         //                        //I didn't uderstand
@@ -136,12 +121,27 @@ NavigationPane {
             ComponentDefinition {
                 id: cardPageDefinition
                 source: "CardPage.qml"
-            },
-            ComponentDefinition {
-                id: cardPageEdit
-                source: "BusinessCardEditor.qml"
             }
         ] // end of attachedObjects
+        //Use this one to open when click a card in the list
+        //        attachedObjects: [
+        //            Sheet {
+        //                id: createCard
+        //                CardPage {
+        //                    id: cardPage
+        //                    onCardPageClose: {
+        //                        createCard.close();
+        //                    }
+        //                }
+        //                onClosed: {
+        ////                    cardPage.newQuote();
+        //                }
+        //            },
+        //            ComponentDefinition {
+        //                id: cardPageDefinition //id: quotePageDefinition
+        //                source: "CardPage.qml" //source: "QuotePage/QuotePage.qml" TODO Criar a CardPage
+        //            }
+        //        ] // end of attachedObjects
     } // End of Page
     onTopChanged: {
         if (page == cardsReceivedListPage) {

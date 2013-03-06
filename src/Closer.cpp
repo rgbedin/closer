@@ -1,73 +1,183 @@
-// Default empty project template
 #include "Closer.hpp"
+//#include "closerDbHelper.h"
 
-#include <iostream>
-#include <fstream>
-
-#include <bb/cascades/Application>
+#include <bb/cascades/GroupDataModel>
+#include <bb/cascades/ListView>
+#include <bb/cascades/NavigationPane>
 #include <bb/cascades/QmlDocument>
-#include <bb/cascades/AbstractPane>
-#include <bb/cascades/TextArea>
-#include <bb/cascades/Page>
-#include <bb/cascades/Container>
-#include <bb/cascades/LayoutProperties>
-#include <bb/cascades/AbsoluteLayoutProperties>
-#include <bb/cascades/TextStyle>
-#include <bb/cascades/ColorPaint>
-
-#include <SocialNetworkModel.h>
+//#include <bb/cascades/AbstractPane>
+//#include <bb/cascades/Application>
+//#include <bb/cascades/QmlDocument>
 
 using namespace bb::cascades;
-using namespace std;
 
-AbstractPane *root;
-Application *appObj;
-
-Closer::Closer(bb::cascades::Application *app)
-: QObject(app)
-{
-    // create scene document from main.qml asset
-    // set parent to created document to ensure it exists for the whole application lifetime
-    QmlDocument *qml = QmlDocument::create("asset:///main.qml").parent(this);
-
-    // creates a link with the QML file
-    qml->setContextProperty("_closer", this);
-    qml->setContextProperty("_socialNetworkModel", new SocialNetworkModel(app));
-
-    // create root object for the UI
-    root = qml->createRootObject<AbstractPane>();
-    // set created root object as a scene
-    app->setScene(root);
-    // saves a reference of the app object
-    appObj = app;
+Closer::Closer() {
 }
 
-void Closer::test(const QString &qmlString)
-{
-	// prints the received string to the standard output
-	cout << qmlString.toUtf8().constData();
+Closer::~Closer() {
+	delete closerDbHelper;
 }
 
-void Closer::addText(float posX, float posY)
-{
-	// create the text style
-	TextStyle* textStyle = new TextStyle;
-	textStyle->setFontSizeValue(15);
-	textStyle->setColor(QVariant(Qt::white));
-	// TODO: set the style to the text area
-	// creates a text area object with background invisible
-	TextArea* textArea = TextArea::create().backgroundVisible(false);
-	// TODO: externalize this string
-	textArea->setText("Tap to input text...");
-	// sets the layout of the text (position)
-	AbsoluteLayoutProperties* layout = AbsoluteLayoutProperties::create().position(posX, posY);
-	textArea->setLayoutProperties(layout);
-	// adds the text area to the scene
-	Container* rootContainer = root->findChild<Container*>("rootContainer");
-	rootContainer->add(textArea);
+void Closer::onStart() {
+	closerDbHelper = new CloserDbHelper();
+
+	if (!loadQMLScene()) {
+		qWarning("Failed to load QML scene.");
+	}
 }
 
-void Closer::showSocialNetworkPicker()
-{
-	// TODO
+bool Closer::loadQMLScene() {
+
+	QmlDocument *qmlDocument = QmlDocument::create("asset:///main.qml");
+
+	if (!qmlDocument->hasErrors()) {
+		qmlDocument->setContextProperty("_closer", this);
+
+		navigationPane = qmlDocument->createRootObject<NavigationPane>();
+
+		QObject::connect(navigationPane, SIGNAL(share()), this, SLOT(share()));
+
+		if (navigationPane) {
+
+			if (loadFromDb()) {
+				Application::instance()->setScene(navigationPane);
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
+
+bool Closer::loadFromDb() {
+
+	QVariantList sqlData = closerDbHelper->loadDataBase("cards.db", "cards");
+
+	qDebug() << sqlData;
+
+	if (!sqlData.isEmpty()) {
+
+		cardsModel = navigationPane->findChild<GroupDataModel*>("cardsModel");
+
+		cardsModel->clear();
+
+		cardsModel->insertList(sqlData);
+
+		cardsListView = navigationPane->findChild<ListView*>(
+				"cardsReceivedList");
+	}
+
+//	Application::instance()->setScene(navigationPane);
+	return true;
+}
+
+//company varchar(30), name varchar(30), corporateTitle varchar(30), email varchar(60), phone varchar(30), address varchar(90), aboutMe varchar(120), linkedinProfile varchar(120));
+void Closer::addNewRecord(const QString &company, const QString &name,
+		const QString &corporateTitle, const QString &email,
+		const QString &phone, const QString &address, const QString &aboutMe,
+		const QString &linkedinProfile) {
+
+	QVariantMap map;
+	map["company"] = QString(company);
+	map["name"] = QString(name);
+	map["corporateTitle"] = QString(corporateTitle);
+	map["email"] = QString(email);
+	map["phone"] = QString(phone);
+	map["address"] = QString(address);
+	map["aboutMe"] = QString(aboutMe);
+	map["linkedinProfile"] = QString(linkedinProfile);
+	//0 -> Card received
+	//1 -> My card
+	map["myCard"] = QString("1");
+
+//	QVariant insertId = closerDbHelper->insert(map);
+//
+//	if (!insertId.isNull()) {
+//		map["id"] = insertId;
+//		cardsModel->insert(map);
+//	}
+
+	closerDbHelper->insert(map);
+	loadFromDb();
+//	navigationPane->pop();
+
+}
+
+void Closer::updateSelectedRecord(const QString &company, const QString &name,
+		const QString &corporateTitle, const QString &email,
+		const QString &phone, const QString &address, const QString &aboutMe,
+		const QString &linkedinProfile, const QString &oldCompany,
+		const QString &oldName, const QString &oldCorporateTitle,
+		const QString &oldEmail, const QString &oldPhone,
+		const QString &oldAddress, const QString &oldAboutMe,
+		const QString &oldLinkedinProfile) {
+
+	QVariantList indexPath = cardsListView->selected();
+
+	if (!indexPath.isEmpty()) {
+
+		QVariantMap itemMapAtIndex = cardsModel->data(indexPath).toMap();
+
+		itemMapAtIndex["company"] = QString(company);
+		itemMapAtIndex["name"] = QString(name);
+		itemMapAtIndex["corporateTitle"] = QString(corporateTitle);
+		itemMapAtIndex["email"] = QString(email);
+		itemMapAtIndex["phone"] = QString(phone);
+		itemMapAtIndex["address"] = QString(address);
+		itemMapAtIndex["aboutMe"] = QString(aboutMe);
+		itemMapAtIndex["linkedinProfile"] = QString(linkedinProfile);
+
+		closerDbHelper->update(itemMapAtIndex, oldCompany, oldName,
+				oldCorporateTitle, oldEmail, oldPhone, oldAddress, oldAboutMe,
+				oldLinkedinProfile);
+		cardsModel->updateItem(indexPath, itemMapAtIndex);
+
+		navigationPane->pop();
+	}
+}
+
+void Closer::deleteRecord() {
+
+	QVariantList indexPath = cardsListView->selected();
+
+	qDebug() << indexPath;
+	qDebug() << cardsModel->data(indexPath);
+
+	if (!indexPath.isEmpty()) {
+
+		QVariantMap map = cardsModel->data(indexPath).toMap();
+
+		qDebug() << map["name"].toString();
+
+		//map["linkedinProfile"]
+		if (closerDbHelper->deleteById(map["company"], map["name"],
+				map["corporateTitle"], map["email"], map["phone"],
+				map["address"], map["aboutMe"])) {
+
+			cardsModel->remove(map);
+			loadFromDb();
+		}
+//		} //end of inner if statement
+	} // end of outer if statement
+} // end of deleteRecord()
+
+void Closer::popNavigationPane() {
+	navigationPane->pop();
+}
+
+void Closer::share(QString message) {
+
+	_nfcShareManager = new NfcShareManager();
+
+	qDebug() << "XXXX shareContentChanged message : " << message << endl;
+
+	NfcShareDataContent request;
+	QByteArray data(message.toUtf8());
+	QUrl url;
+	request.setUri(url);
+	request.setMimeType("text/plain");
+	request.setData(data);
+	NfcShareSetContentError::Type rc = _nfcShareManager->setShareContent(request);
+	qDebug() << "XXXX shareContentChanged rc =" << rc << endl;
+}
+

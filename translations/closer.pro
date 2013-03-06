@@ -1,1 +1,1 @@
-include (../closer.pro)
+include (../Closer.pro)

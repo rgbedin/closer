@@ -1,4 +1,4 @@
-QMAKE_TARGET  = closer
+QMAKE_TARGET  = Closer
 PROJECT_DIR	  := $(dir $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 I18N_DIR	  := $(PROJECT_DIR)/translations
 

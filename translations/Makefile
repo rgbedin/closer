@@ -1,4 +1,4 @@
-QMAKE_TARGET  = closer
+QMAKE_TARGET  = Closer
 LUPDATE       = $(QNX_HOST)/usr/bin/lupdate
 LRELEASE      = $(QNX_HOST)/usr/bin/lrelease
 

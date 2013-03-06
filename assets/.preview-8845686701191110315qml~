@@ -1,0 +1,206 @@
+import bb.cascades 1.0
+
+Page {
+    id: cardPage
+    signal cardPageClose()
+    //    titleBar: TitleBar {
+    //        id: cardPageBar
+    //        title: "Add"
+    //        visibility: ChromeVisibility.Visible
+    //        dismissAction: ActionItem {
+    //            title: "Cancel"
+    //            onTriggered: {
+    //                tab1.close()
+    //            }
+    //        }
+    //
+    //    } // TitleBar
+    Container {
+        id: container
+        property bool editMode: false
+        layout: AbsoluteLayout {
+        }
+        background: Color.create("#333333")
+        preferredWidth: 200.0
+        //Better way to set background picture
+        //         background: backgroundPaint.imagePaint
+        //
+        //                attachedObjects: [
+        //                    ImagePaintDefinition {
+        //                        id: backgroundPaint
+        //                        imageSource: "asset:///images/background.png"
+        //                    }
+        //                ]
+        Container {
+            background: Color.create("#333333")
+            preferredWidth: 728.0
+            preferredHeight: 140.0
+            translationX: 20.0
+            layout: DockLayout {
+            }
+            Label {
+                id: companyLabel
+                text: "Company"
+                textStyle.fontSize: FontSize.XLarge
+                textStyle.fontFamily: "Verdana"
+                textStyle.textAlign: TextAlign.Center
+                verticalAlignment: VerticalAlignment.Center
+                horizontalAlignment: HorizontalAlignment.Center
+                textStyle.color: Color.White
+            }
+        }
+        Container {
+            background: Color.create("#FFFFFF")
+            preferredWidth: 728.0
+            preferredHeight: 400.0
+            translationX: 20.0
+            translationY: 140.0
+            layout: AbsoluteLayout {
+            }
+            Container {
+                background: Color.create("#FFFFFF")
+                preferredWidth: 364.0
+                preferredHeight: 400.0
+                translationX: 0.0
+                translationY: 0.0
+                layout: AbsoluteLayout {
+                }
+                Label {
+                    id: nameLabel
+                    translationY: 120.0
+                    text: "Name"
+                    textStyle.fontSize: FontSize.Large
+                    textStyle.fontFamily: "Verdana"
+                    textStyle.textAlign: TextAlign.Center
+                }
+                Label {
+                    id: corporateTitleLabel
+                    translationX: 0.0
+                    translationY: 200.0
+                    text: "Corporate Title"
+                    textStyle.fontSize: FontSize.PercentageValue
+                    textStyle.fontFamily: "Verdana"
+                    textStyle.textAlign: TextAlign.Center
+                }
+            }
+            Container {
+                background: Color.create("#FFFFFF")
+                preferredWidth: 384.0
+                preferredHeight: 400.0
+                translationX: 344.0
+                translationY: 0.0
+                layout: AbsoluteLayout {
+                }
+                Label {
+                    id: emailLabel
+                    translationX: 0.0
+                    translationY: 20.0
+                    text: "e-mail"
+                    textStyle.fontSize: FontSize.PointValue
+                    textStyle.fontFamily: "Verdana"
+                    textStyle.textAlign: TextAlign.Center
+                }
+                Label {
+                    id: phoneLabel
+                    translationX: 0.0
+                    translationY: 120.0
+                    text: "phone"
+                    textStyle.fontSize: FontSize.PointValue
+                    textStyle.fontFamily: "Verdana"
+                    textStyle.textAlign: TextAlign.Center
+                }
+                Label {
+                    id: adressLabel
+                    translationX: 0.0
+                    translationY: 220.0
+                    text: "address"
+                    textStyle.fontSize: FontSize.PointValue
+                    textStyle.fontFamily: "Verdana"
+                    textStyle.textAlign: TextAlign.Center
+                }
+            }
+        }
+        Container {
+            background: Color.create("#333333")
+            preferredWidth: 728.0
+            preferredHeight: 290.0
+            translationX: 20.0
+            translationY: 560.0
+            layout: AbsoluteLayout {
+            }
+            Label {
+                text: "About me"
+                translationX: 280.0
+                textStyle.color: Color.White
+                textStyle.fontFamily: "Verdana"
+            }
+            Label {
+                id: aboutMeArea
+                text: "I am..."
+                translationY: 60.0
+                textStyle.fontFamily: "Verdana"
+                textStyle.color: Color.White
+            }
+        }
+        Container {
+            background: Color.create("#333333")
+            preferredWidth: 728.0
+            preferredHeight: 130.0
+            translationX: 20.0
+            translationY: 880.0
+            layout: AbsoluteLayout {
+            }
+            ImageButton {
+                id: linkedin_icon_access
+                defaultImageSource: "asset:///images/linkedin_icon_color.png"
+                pressedImageSource: "asset:///images/linkedin_icon_bw.png"
+                translationX: 0.0
+            }
+            //                ImageButton {
+            //                    defaultImageSource: "asset:///images/button_ok.png"
+            //                    translationX: 560.0
+            //                    onClicked: {
+            //                    }
+            //                }
+        }
+        //        EditControls {
+        //Go to the edit page
+        //        }
+    }
+    function newCard() {
+        nameField.text = "";
+        corporateTitle.text = "";
+        emailField.text = "";
+        phoneField.text = "";
+        addressArea.text = "";
+        aboutMeArea.text = "";
+    }
+    paneProperties: NavigationPaneProperties {
+        backButton: ActionItem {
+            title: "Cards"
+            onTriggered: {
+                nav.pop();
+                container.editMode = false;
+            }
+        }
+    }
+    actions: [
+        //Remeber to change: Can't delete cards received
+        ActionItem {
+            title: "Edit"
+            imageSource: "asset:///images/Edit.png"
+            ActionBar.placement: ActionBarPlacement.OnBar
+            onTriggered: {
+                container.editMode = true
+            }
+        },
+        DeleteActionItem {
+            objectName: "DeleteAction"
+            title: "Delete"
+            onTriggered: {
+                _quoteApp.deleteRecord();
+                container.editMode = false
+            }
+        }
+    ]
+}
