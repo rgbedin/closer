@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Closer.hpp'
 **
-** Created: Tue Mar 5 21:30:04 2013
+** Created: Tue Mar 19 12:05:00 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -31,19 +31,19 @@ static const uint qt_meta_data_Closer[] = {
        0,       // signalCount
 
  // slots: signature, parameters, type, tag, flags
-       8,    7,    7,    7, 0x0a,
+      16,    8,    7,    7, 0x0a,
 
  // methods: signature, parameters, type, tag, flags
-      88,   16,    7,    7, 0x02,
-     334,  166,    7,    7, 0x02,
-     484,    7,    7,    7, 0x02,
+     103,   31,    7,    7, 0x02,
+     349,  181,    7,    7, 0x02,
      499,    7,    7,    7, 0x02,
+     514,    7,    7,    7, 0x02,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_Closer[] = {
-    "Closer\0\0share()\0"
+    "Closer\0\0message\0share(QString)\0"
     "company,name,corporateTitle,email,phone,address,aboutMe,linkedinProfil"
     "e\0"
     "addNewRecord(QString,QString,QString,QString,QString,QString,QString,Q"
@@ -63,7 +63,7 @@ void Closer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
         Q_ASSERT(staticMetaObject.cast(_o));
         Closer *_t = static_cast<Closer *>(_o);
         switch (_id) {
-        case 0: _t->share(); break;
+        case 0: _t->share((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 1: _t->addNewRecord((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7])),(*reinterpret_cast< const QString(*)>(_a[8]))); break;
         case 2: _t->updateSelectedRecord((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7])),(*reinterpret_cast< const QString(*)>(_a[8])),(*reinterpret_cast< const QString(*)>(_a[9])),(*reinterpret_cast< const QString(*)>(_a[10])),(*reinterpret_cast< const QString(*)>(_a[11])),(*reinterpret_cast< const QString(*)>(_a[12])),(*reinterpret_cast< const QString(*)>(_a[13])),(*reinterpret_cast< const QString(*)>(_a[14])),(*reinterpret_cast< const QString(*)>(_a[15])),(*reinterpret_cast< const QString(*)>(_a[16]))); break;
         case 3: _t->deleteRecord(); break;
